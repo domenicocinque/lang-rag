@@ -1,8 +1,8 @@
 from sqlmodel import create_engine, SQLModel
 
-engine = create_engine(
-    "postgresql+psycopg2://postgres:postgres@localhost:5432/translation_db"
-)
+from src.core.config import settings
+
+engine = create_engine(settings.DATABASE_URL)
 
 
 def init_db() -> None:

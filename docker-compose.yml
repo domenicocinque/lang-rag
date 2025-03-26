@@ -1,4 +1,18 @@
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/translation_db
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+
   db:
     image: pgvector/pgvector:pg17
     environment:
@@ -17,4 +31,4 @@ services:
       retries: 5
 
 volumes:
-  postgres_data: 
+  postgres_data:
