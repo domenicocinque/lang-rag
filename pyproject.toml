@@ -1,0 +1,21 @@
+[project]
+name = "mleng-pt"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.12",
+    "uvicorn>=0.34.0",
+    "sqlalchemy>=2.0.27",
+    "psycopg2-binary>=2.9.9",
+    "python-dotenv>=1.0.1",
+    "sqlmodel>=0.0.24",
+    "pgvector>=0.4.0",
+    "sentence-transformers>=3.4.1",
+]
+
+[dependency-groups]
+dev = [
+    "requests>=2.32.3",
+]
