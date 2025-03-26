@@ -15,8 +15,9 @@ from src.models import (
     StammeringCheckResponse,
 )
 from src.services import detect_stammering
+from src.core.config import settings
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=settings.LOG_LEVEL)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(
@@ -24,7 +25,7 @@ app = FastAPI(
 )
 
 try:
-    model = SentenceTransformer("all-MiniLM-L6-v2")
+    model = SentenceTransformer(settings.MODEL_NAME)
     logger.info("Successfully loaded the sentence transformer model")
 except Exception as e:
     logger.error(f"Failed to load the sentence transformer model: {e}")
