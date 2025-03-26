@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM ghcr.io/astral-sh/uv:debian
 
 WORKDIR /app
 
@@ -11,15 +11,16 @@ RUN apt-get update && apt-get install -y \
 COPY pyproject.toml uv.lock ./
 
 # Install Python dependencies
-RUN pip install --no-cache-dir uv && \
-    uv pip install --system .
+RUN uv sync  
 
 # Copy application code
 COPY src/ ./src/
 COPY init_db.py ./
+COPY start.sh ./
+RUN chmod +x start.sh
 
 # Expose the port the app runs on
 EXPOSE 8000
 
-# Command to run the application
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Command to run the startup script
+CMD ["./start.sh"]
