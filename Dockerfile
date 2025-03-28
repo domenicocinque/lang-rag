@@ -1,26 +1,26 @@
-FROM ghcr.io/astral-sh/uv:debian
+FROM python:3.12-slim
 
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Change the working directory to the `app` directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+# Install dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project
 
-# Copy dependency files
-COPY pyproject.toml uv.lock ./
+# Copy the project into the image
+ADD . /app
 
-# Install Python dependencies
-RUN uv sync  
+# Sync the project
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen
 
-# Copy application code
-COPY src/ ./src/
-COPY init_db.py ./
-COPY start.sh ./
-RUN chmod +x start.sh
-
-# Expose the port the app runs on
-EXPOSE 8000
+# Make the startup script executable
+RUN chmod +x scripts/start.sh
 
 # Command to run the startup script
-CMD ["./start.sh"]
+CMD ["./scripts/start.sh"]

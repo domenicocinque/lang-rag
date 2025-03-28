@@ -1,4 +1,4 @@
-from sqlmodel import create_engine, SQLModel
+from sqlmodel import create_engine, SQLModel, text, Session
 
 from src.core.config import settings
 from src.models import TranslationPair # noqa
@@ -6,7 +6,10 @@ from src.models import TranslationPair # noqa
 engine = create_engine(settings.DATABASE_URL, echo=True)
 
 
-def init_db() -> None:
+def create_db(session: Session) -> None:
+    with session.begin():
+        session.exec(text("CREATE EXTENSION IF NOT EXISTS vector"))
+
     SQLModel.metadata.create_all(engine)
 
 
