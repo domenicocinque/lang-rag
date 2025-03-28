@@ -1,7 +1,7 @@
 from sqlmodel import create_engine, SQLModel, text, Session
 
 from src.core.config import settings
-from src.models import TranslationPair # noqa
+from src.models import Sentence  # noqa
 
 engine = create_engine(settings.DATABASE_URL, echo=True)
 
