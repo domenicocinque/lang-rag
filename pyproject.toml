@@ -1,7 +1,7 @@
 [project]
-name = "mleng-pt"
+name = "lang-rag"
 version = "0.1.0"
-description = "Add your description here"
+description = "A Python-based application for conducting similarity searches and retrieving similar pairs from a dataset using a vector database."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
