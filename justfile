@@ -12,3 +12,7 @@ fmt:
 # Run ruff check
 lint:
     uvx ruff check --fix
+
+# Run mypy
+mypy:
+    uv run mypy src

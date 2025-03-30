@@ -1,10 +1,9 @@
+from typing import Any
+
 from fastapi import HTTPException, status
 from fastapi.routing import APIRouter
 import logging
-from sqlmodel import (
-    Session,
-    select,
-)
+from sqlmodel import Session, select
 from sentence_transformers import SentenceTransformer
 import uuid
 
@@ -24,7 +23,7 @@ logging.basicConfig(level=settings.LOG_LEVEL)
 logger = logging.getLogger(__name__)
 
 try:
-    model = SentenceTransformer(settings.MODEL_NAME)
+    model = SentenceTransformer(settings.MODEL_NAME)  # type: ignore
     logger.info("Successfully loaded the sentence transformer model")
 except Exception as e:
     logger.error(f"Failed to load the sentence transformer model: {e}")
@@ -35,7 +34,7 @@ router = APIRouter()
 
 
 @router.post("/pairs", response_model=str, status_code=status.HTTP_201_CREATED)
-async def add_translation_pair(pair: TranslationPairCreate):
+async def add_translation_pair(pair: TranslationPairCreate) -> Any:
     """
     Add a new translation pair to the database.
     """
@@ -74,13 +73,13 @@ async def add_translation_pair(pair: TranslationPairCreate):
 @router.get("/prompt", response_model=RagResponse)
 async def get_translation_prompt(
     source_language: str, target_language: str, query_sentence: str, top_k: int = 4
-):
+) -> Any:
     """
     API endpoint to get a translation prompt with similar examples.
     """
     query_embedding = model.encode(query_sentence).tolist()
     with Session(engine) as session:
-        src = Sentence.__table__.alias("src")
+        src = Sentence.__table_.alias("src")
         tgt = Sentence.__table__.alias("tgt")
         stmt = (
             select(
@@ -88,15 +87,12 @@ async def get_translation_prompt(
                 tgt.c.sentence.label("target_sentence"),
                 src.c.embedding.cosine_distance(query_embedding).label("distance"),
             )
-            .join(
-                tgt, (src.c.id == tgt.c.id)
-            )  # Join on the id (shared across languages)
+            .join(tgt, (src.c.id == tgt.c.id))
             .where(src.c.language == source_language)
             .where(tgt.c.language == target_language)
-            .order_by("distance")  # Order by vector similarity
+            .order_by("distance")
             .limit(top_k)
         )
-
         results = session.exec(stmt).fetchall()
 
     suggestions = [r[1] for r in results]
@@ -104,18 +100,9 @@ async def get_translation_prompt(
 
 
 @router.get("/stammering", response_model=StammeringCheckResponse)
-def stammering_check(
-    source_sentence: str, translated_sentence: str
-) -> StammeringCheckResponse:
+def stammering_check(source_sentence: str, translated_sentence: str) -> Any:
     """
     API endpoint to check for stammering in a translated sentence.
-
-    Args:
-        source_sentence (str): The original sentence.
-        translated_sentence (str): The translated sentence.
-
-    Returns:
-        StammeringCheckResponse: A boolean indicating if the sentence has stammering.
     """
     try:
         result_source = detect_stammering(source_sentence)
@@ -131,7 +118,7 @@ def stammering_check(
 
 
 @router.get("/health", response_model=HealthCheckResponse)
-async def health_check():
+async def health_check() -> Any:
     """
     Health check endpoint to verify the API is running correctly.
     """

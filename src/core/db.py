@@ -8,7 +8,7 @@ engine = create_engine(settings.DATABASE_URL, echo=True)
 
 def create_db(session: Session) -> None:
     with session.begin():
-        session.exec(text("CREATE EXTENSION IF NOT EXISTS vector"))
+        session.exec(text("CREATE EXTENSION IF NOT EXISTS vector"))  # type: ignore
 
     SQLModel.metadata.create_all(engine)
 
