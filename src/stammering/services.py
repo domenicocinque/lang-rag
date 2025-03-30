@@ -1,12 +1,11 @@
 import re
 import logging
 from collections import Counter
-from typing import List
 
 logger = logging.getLogger(__name__)
 
 
-def _get_ngrams(words: List[str], n: int) -> List[str]:
+def _get_ngrams(words: list[str], n: int) -> list[str]:
     """
     Generate n-grams from a list of words.
 

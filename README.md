@@ -1,11 +1,11 @@
 # Translation Pair Search
 
-A Python-based application for conducting similarity searches and retrieving similar pairs from a dataset using a vector database.
+A FastAPI application for conducting similarity searches and retrieving similar pairs from a dataset using a vector database.
 
 ## Prerequisites
 
 - Docker
-- Pgvector 
+- Pgvector
 
 ## Installation
 
@@ -13,5 +13,5 @@ A Python-based application for conducting similarity searches and retrieving sim
 
 2. Start the application:
 ```bash
-docker-compose up -d
+docker compose up
 ```

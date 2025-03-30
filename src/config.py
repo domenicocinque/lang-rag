@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # Project Paths
-    ROOT_PATH: Path = Path(__file__).parent.parent.parent
+    ROOT_PATH: Path = Path(__file__).parent.parent
     SRC_PATH: Path = ROOT_PATH / "src"
 
     model_config = SettingsConfigDict(env_file=ROOT_PATH / ".env")

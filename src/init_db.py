@@ -1,5 +1,5 @@
 from sqlmodel import Session
-from src.core.db import create_db, drop_db, engine  # noqa
+from src.db import create_db, drop_db, engine  # noqa
 
 
 def main() -> None:

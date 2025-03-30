@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 import uvicorn
 
-from src.routes import router
+from src.rag.router import router as rag_router
+from src.stammering.router import router as stammer_router
 
 app = FastAPI(
     title="Rag Translation Service API",
 )
-app.include_router(router)
+app.include_router(rag_router)
+app.include_router(stammer_router)
 
 
 if __name__ == "__main__":
